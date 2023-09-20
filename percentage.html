@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Barra de Carregamento</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <style>
+      * {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+        font-weight: 700;
+        font-size: 20px;
+        color: #72a3f3;
+        transition: background-color 0.5s ease, color 0.5s ease;
+
+      }
+      body {
+        /* background-color: rgba(0, 0, 0, 0.829); */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        transition: background-color 0.5s ease, color 0.5s ease;
+      }
+      .shadow {
+        box-shadow: 0px 7px 15px rgba(0, 0, 0, 0.25);
+        border-radius: 16px;
+      }
+      .bg-progressed {
+        background: #72a3f3 !important;
+        border-radius: 36px;
+      }
+      .bg-progress {
+        background: #c0d3f1;
+        border-radius: 36px;
+      }
+      .text-right {
+        text-align: right;
+      }
+      #counter {
+        color: #A6B5CE;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="darkModeSwitch" checked>
+                    <label class="form-check-label" for="darkModeSwitch"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-moon-stars-fill" viewBox="0 0 25 25">
+                        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+                        <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
+                      </svg></label>
+                </div>
+
+            </div>
+        <div class="col-12 mt-2">
+          <div class="card shadow">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-6">
+                  <div class="col-3">
+                    <span id="year"></span>
+                  </div>
+                </div>
+                <div class="col-6 text-right">
+                  <span id="counter"></span>
+                </div>
+              </div>
+              <p class="card-text">
+                <div class="progress bg-progress" role="progressbar">
+                    <div class="progress-bar bg-progressed" id="progress-bar"></div>
+                </div>
+                <div id="counter" class="mt-2"></div>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <script>
+      function updateProgressBar() {
+        var now = new Date();
+        var start = new Date(now.getFullYear(), 0, 0);
+        var diff = now - start;
+        var oneDay = 1000 * 60 * 60 * 24;
+        var dayOfYear = Math.floor(diff / oneDay);
+        var progress = (dayOfYear / 365) * 100;
+
+        var progressBar = document.getElementById("progress-bar");
+        progressBar.style.width = progress + "%";
+
+      }
+
+      updateProgressBar();
+      function updateCounter() {
+        var now = new Date();
+
+        var endOfYear = new Date(now.getFullYear() + 1, 0, 0);
+
+        var diff = endOfYear - now;
+
+        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        var hours = Math.floor(
+          (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        var counter = document.getElementById("counter");
+        var icon = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
+  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+</svg>`;
+        counter.innerHTML =
+          icon +
+          " " +
+          days +
+          " Dias " +
+          hours +
+          " Horas " +
+          minutes +
+          " Minutos " +
+          seconds +
+          " Segundos";
+          var year = document.getElementById("year");
+        year.innerHTML = now.getFullYear() 
+      }
+
+      // Atualiza o contador a cada segundo
+      updateCounter();
+      setInterval(updateCounter, 1000);
+      document.getElementById('darkModeSwitch').addEventListener('change', function() {
+            const htmlElement = document.documentElement;
+            const currentTheme = htmlElement.getAttribute('data-bs-theme');
+
+            if (currentTheme === 'dark') {
+                htmlElement.removeAttribute('data-bs-theme');
+            } else {
+                htmlElement.setAttribute('data-bs-theme', 'dark');
+            }
+        });
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
