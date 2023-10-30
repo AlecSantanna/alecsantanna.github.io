@@ -59,9 +59,7 @@
   .flag {
     background-color: green !important;
   }
-  .bomb {
-    background-color: red !important;
-  }
+ 
 .cell {
   cursor: pointer;
 }
