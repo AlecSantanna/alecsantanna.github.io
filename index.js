@@ -105,10 +105,19 @@ function destroyMineSweeper() {
 }
 
 function startMineSweeper() {
+  const explosionSound = document.getElementById("explosionSound");
+
   const numRows = 6;
   const numCols = 6;
   const numBombs = 5;
   let playing = true;
+  let emojis = [];
+  emojis[0] = "💣";
+  emojis[1] = "😱";
+  emojis[2] = "🧐";
+  emojis[3] = "😏";
+  emojis[4] = "😌";
+  emojis[5] = "😎";
 
   function generateBombs() {
     const bombLocations = [];
@@ -130,17 +139,25 @@ function startMineSweeper() {
     const row = $("<tr></tr>");
 
     for (let j = 0; j < numCols; j++) {
-      const cell = $('<td class="cell">&nbsp;</td>');
+      const cell = $('<td class="cell text-center h6">😴</td>');
 
       cell.click(function () {
         if (playing) {
           const isBomb = $(this).hasClass("bomb");
           if (isBomb) {
             $(this).addClass("bomb-found");
+            $(this).text(`${emojis[0]}`);
             $("#winOrLose").html("Você clicou em uma bomba! Game Over!");
             playing = false;
+            explosionSound.play(); // Reproduz o som de explosão
           } else {
             $(this).addClass("flag");
+            const row = $(this).parent().index();
+            const col = $(this).index();
+
+            const distance = calculateDistance(row, col);
+
+            $(this).text(distance + `${emojis[distance]}`);
           }
           calculateCells();
         }
@@ -157,6 +174,18 @@ function startMineSweeper() {
     const [row, col] = location.split("-");
     $(`.minesweeper-board tr:eq(${row}) td:eq(${col})`).addClass("bomb");
   });
+
+  function calculateDistance(row, col) {
+    let minDistance = Infinity;
+
+    bombLocations.forEach((location) => {
+      const [bombRow, bombCol] = location.split("-");
+      const distance = Math.abs(row - bombRow) + Math.abs(col - bombCol);
+      minDistance = Math.min(minDistance, distance);
+    });
+
+    return minDistance;
+  }
   calculateCells();
 }
 

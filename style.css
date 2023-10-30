@@ -65,3 +65,7 @@
 .cell:hover {
   background-color: blue !important;
 }
+
+td {
+  width: 100px;
+}
