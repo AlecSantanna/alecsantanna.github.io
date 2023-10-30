@@ -203,7 +203,7 @@ function triggerClickOnBombs() {
 function startMineSweeper() {
   hasVictory = false;
   elevator.play();
-
+  $("#bombsCount").html(`Bombas: ${numBombs}`);
   let playing = true;
 
   function generateBombs() {
