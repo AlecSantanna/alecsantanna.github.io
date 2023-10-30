@@ -40,3 +40,28 @@
     color: #A6B5CE;
     font-size: 12px;
   }
+  .gameBackground:hover{
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.233);
+    background-color: #6c6d6e1c;
+  }
+  .hide {
+    display: none !important;
+  }
+  #campoMinado>tr>td:hover {
+    cursor: pointer;
+    background-color: blue !important;
+  }
+  .bomb-found {
+    background-color: red !important;
+
+  }
+  .flag {
+    background-color: green !important;
+  }
+.cell {
+  cursor: pointer;
+}
+.cell:hover {
+  background-color: blue !important;
+}

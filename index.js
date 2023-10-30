@@ -57,6 +57,109 @@ document
     }
   });
 
+$("#loadGame1").on("click", function () {
+  $("#indexContent").addClass("hide");
+  $("#gameContent").removeClass("hide");
+  startMineSweeper();
+});
+
+$(".my-cell").click(function () {
+  if (!$(this).hasClass("clicked")) {
+    $(this).addClass("clicked");
+  }
+});
+
+function calculateCells() {
+  let nonBombCount = 0;
+  let flagsFound = 0;
+  $(".cell").each(function () {
+    if (!$(this).hasClass("bomb")) {
+      nonBombCount++;
+    }
+    if ($(this).hasClass("flag")) {
+      flagsFound++;
+    }
+  });
+
+  $("#nonBombCounter").html(nonBombCount - flagsFound);
+
+  if (nonBombCount - flagsFound === 0) {
+    $("#winOrLose").html("Você venceu!");
+  }
+}
+
+function back() {
+  destroyMineSweeper();
+  $("#indexContent").removeClass("hide");
+  $("#gameContent").addClass("hide");
+}
+
+function restartMineSweeper() {
+  destroyMineSweeper();
+  startMineSweeper();
+}
+
+function destroyMineSweeper() {
+  $(".minesweeper-board").empty();
+  $("#winOrLose").html("&nbsp;");
+}
+
+function startMineSweeper() {
+  const numRows = 6;
+  const numCols = 6;
+  const numBombs = 5;
+  let playing = true;
+
+  function generateBombs() {
+    const bombLocations = [];
+
+    while (bombLocations.length < numBombs) {
+      const row = Math.floor(Math.random() * numRows);
+      const col = Math.floor(Math.random() * numCols);
+      const location = `${row}-${col}`;
+
+      if (!bombLocations.includes(location)) {
+        bombLocations.push(location);
+      }
+    }
+
+    return bombLocations;
+  }
+
+  for (let i = 0; i < numRows; i++) {
+    const row = $("<tr></tr>");
+
+    for (let j = 0; j < numCols; j++) {
+      const cell = $('<td class="cell">&nbsp;</td>');
+
+      cell.click(function () {
+        if (playing) {
+          const isBomb = $(this).hasClass("bomb");
+          if (isBomb) {
+            $(this).addClass("bomb-found");
+            $("#winOrLose").html("Você clicou em uma bomba! Game Over!");
+            playing = false;
+          } else {
+            $(this).addClass("flag");
+          }
+          calculateCells();
+        }
+      });
+
+      row.append(cell);
+    }
+
+    $(".minesweeper-board").append(row);
+  }
+
+  const bombLocations = generateBombs();
+  bombLocations.forEach((location) => {
+    const [row, col] = location.split("-");
+    $(`.minesweeper-board tr:eq(${row}) td:eq(${col})`).addClass("bomb");
+  });
+  calculateCells();
+}
+
 window.onload = function () {
   updateProgressBar();
   updateCounter();
