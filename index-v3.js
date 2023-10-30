@@ -237,7 +237,7 @@ function startMineSweeper() {
             $(this).addClass("bomb-found");
             $(this).text(`${emojis[0]}`);
             $("#winOrLose").html("Você clicou em uma bomba! Game Over!");
-
+            showBombs();
             playing = false;
             explosionSound.play();
             elevator.pause();
