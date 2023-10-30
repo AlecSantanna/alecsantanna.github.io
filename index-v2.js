@@ -7,6 +7,11 @@ const explosionSound = document.getElementById("explosionSound");
 elevator.loop = true;
 elevator.volume = 0.01;
 let hasVictory = false;
+let mobile = false;
+
+const numRows = 8;
+const numCols = 6;
+const numBombs = 5;
 
 let emojis = [];
 emojis[0] = "💣";
@@ -197,9 +202,6 @@ function startMineSweeper() {
   hasVictory = false;
   elevator.play();
 
-  const numRows = 6;
-  const numCols = 9;
-  const numBombs = 10;
   let playing = true;
 
   function generateBombs() {
@@ -222,7 +224,9 @@ function startMineSweeper() {
     const row = $("<tr></tr>");
 
     for (let j = 0; j < numCols; j++) {
-      const cell = $('<td class="cell text-center h6">😴</td>');
+      const cell = $(
+        `<td class="cell text-center ${!mobile ? "h6" : "mob"}">😴</td>`
+      );
 
       cell.click(function () {
         if (playing && !hasVictory) {
@@ -278,4 +282,19 @@ function startMineSweeper() {
 window.onload = function () {
   updateProgressBar();
   updateCounter();
+
+  if (
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    )
+  ) {
+    // O usuário está acessando a partir de um dispositivo móvel
+    mobile = true;
+    numRows = 8;
+    numCols = 6;
+    numBombs = 10;
+  } else {
+    // O usuário está acessando a partir de um computador
+    console.log("Usuário está em um computador");
+  }
 };
