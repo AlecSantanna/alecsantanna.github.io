@@ -106,7 +106,7 @@ function destroyMineSweeper() {
 
 function startMineSweeper() {
   const explosionSound = document.getElementById("explosionSound");
-
+  explosionSound.volume = 0.1;
   const numRows = 6;
   const numCols = 6;
   const numBombs = 5;
