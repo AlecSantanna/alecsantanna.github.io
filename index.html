@@ -15,6 +15,9 @@
   <body>
     <div class="container" id="indexContent">
       <audio id="explosionSound" src="explosion.mp3" preload="auto"></audio>
+      <audio id="sonicSound" src="sonic_water_song.mp3" preload="auto"></audio>
+      <audio id="victory" src="victory.mp3" preload="auto"></audio>
+      <audio id="elevatorSound" src="elevator.mp3" preload="auto"></audio>
 
         <div class="row">
           <div class="col-12">
@@ -68,7 +71,7 @@
           </svg></button>
         </div>
         <div class="col-3 text-center">
-          Bombas: 5
+          Bombas: 10
         </div>
         <div class="col-3 text-center">
           Bandeiras restantes: <span id="nonBombCounter"></span>
@@ -127,6 +130,9 @@
               </tr>
             </tbody>
           </table> -->
+        </div>
+        <div class="col-12 text-center" id="lastBomb">
+          &nbsp;
         </div>
         <div class="col-12 text-center" id="winOrLose">
           &nbsp;

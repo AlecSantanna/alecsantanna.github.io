@@ -1,3 +1,21 @@
+let volumeIncreaseInterval;
+const elevator = document.getElementById("elevatorSound");
+const victorySound = document.getElementById("victory");
+var sonicSound = document.getElementById("sonicSound");
+const explosionSound = document.getElementById("explosionSound");
+
+elevator.loop = true;
+elevator.volume = 0.01;
+let hasVictory = false;
+
+let emojis = [];
+emojis[0] = "💣";
+emojis[1] = "😱";
+emojis[2] = "🧐";
+emojis[3] = "😏";
+emojis[4] = "😌";
+emojis[5] = "😎";
+
 function updateProgressBar() {
   var now = new Date();
   var start = new Date(now.getFullYear(), 0, 0);
@@ -85,7 +103,61 @@ function calculateCells() {
 
   if (nonBombCount - flagsFound === 0) {
     $("#winOrLose").html("Você venceu!");
+    victory();
+    stopVolumeIncrease();
   }
+
+  if (nonBombCount - flagsFound === 1) {
+    // startSonicSound();
+  }
+}
+
+function showBombs() {
+  $(".cell.bomb").each(function () {
+    $(this).text(`${emojis[0]}`);
+    $(this).addClass("bomb-found");
+  });
+}
+
+function startSonicSound() {
+  $("#lastBomb").html("ENCONTRE A ÚLTIMA BANDEIRA!!!!!!");
+  elevator.pause();
+  sonicSound.currentTime = 0;
+
+  // sonicSound.play();
+  // sonicSound.volume = 0;
+  // let counter = 0;
+
+  // volumeIncreaseInterval = setInterval(() => {
+  //   counter++;
+  //   console.log(counter);
+  //   if (sonicSound.volume < 0.9) {
+  //     increaseVolume(sonicSound);
+  //   }
+
+  //   if (counter === 12) {
+  //     setInterval(() => {
+  //       sonicSound.pause();
+  //     }, 500);
+  //   }
+  //   if (counter === 13) {
+  //     sonicSound.pause();
+  //     lose();
+  //   }
+  // }, 1000);
+}
+
+function stopVolumeIncrease() {
+  sonicSound.pause();
+  clearInterval(volumeIncreaseInterval);
+}
+
+function victory() {
+  hasVictory = true;
+  victorySound.volume = 0.7;
+  victorySound.play();
+  stopVolumeIncrease();
+  showBombs();
 }
 
 function back() {
@@ -102,22 +174,33 @@ function restartMineSweeper() {
 function destroyMineSweeper() {
   $(".minesweeper-board").empty();
   $("#winOrLose").html("&nbsp;");
+  stopVolumeIncrease();
+  elevator.pause();
+}
+
+function increaseVolume(sound) {
+  const volumeIncrement = 0.06;
+  sound.volume += volumeIncrement;
+}
+
+function lose() {
+  triggerClickOnBombs();
+}
+
+function triggerClickOnBombs() {
+  $(".cell.bomb").each(function () {
+    $(this).click(); // Dispara um evento de clique em cada célula com a classe "bomb"
+  });
 }
 
 function startMineSweeper() {
-  const explosionSound = document.getElementById("explosionSound");
-  explosionSound.volume = 0.1;
+  hasVictory = false;
+  elevator.play();
+
   const numRows = 6;
-  const numCols = 6;
-  const numBombs = 5;
+  const numCols = 9;
+  const numBombs = 10;
   let playing = true;
-  let emojis = [];
-  emojis[0] = "💣";
-  emojis[1] = "😱";
-  emojis[2] = "🧐";
-  emojis[3] = "😏";
-  emojis[4] = "😌";
-  emojis[5] = "😎";
 
   function generateBombs() {
     const bombLocations = [];
@@ -142,14 +225,17 @@ function startMineSweeper() {
       const cell = $('<td class="cell text-center h6">😴</td>');
 
       cell.click(function () {
-        if (playing) {
+        if (playing && !hasVictory) {
           const isBomb = $(this).hasClass("bomb");
           if (isBomb) {
             $(this).addClass("bomb-found");
             $(this).text(`${emojis[0]}`);
             $("#winOrLose").html("Você clicou em uma bomba! Game Over!");
+
             playing = false;
-            explosionSound.play(); // Reproduz o som de explosão
+            explosionSound.play();
+            elevator.pause();
+            stopVolumeIncrease();
           } else {
             $(this).addClass("flag");
             const row = $(this).parent().index();
