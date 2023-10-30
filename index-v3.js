@@ -9,9 +9,9 @@ elevator.volume = 0.01;
 let hasVictory = false;
 let mobile = false;
 
-const numRows = 8;
-const numCols = 6;
-const numBombs = 5;
+let numRows = 8;
+let numCols = 6;
+let numBombs = 5;
 
 let emojis = [];
 emojis[0] = "💣";
@@ -20,6 +20,8 @@ emojis[2] = "🧐";
 emojis[3] = "😏";
 emojis[4] = "😌";
 emojis[5] = "😎";
+emojis[6] = "😎";
+emojis[7] = "😎";
 
 function updateProgressBar() {
   var now = new Date();
@@ -290,7 +292,7 @@ window.onload = function () {
   ) {
     // O usuário está acessando a partir de um dispositivo móvel
     mobile = true;
-    numRows = 8;
+    numRows = 9;
     numCols = 6;
     numBombs = 10;
   } else {
