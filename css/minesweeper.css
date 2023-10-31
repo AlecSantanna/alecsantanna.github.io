@@ -1,0 +1,39 @@
+#campoMinado>tr>td:hover {
+    cursor: pointer;
+    background-color: blue !important;
+}
+
+.bomb-found {
+    background-color: red !important;
+
+}
+
+.flag {
+    background-color: green !important;
+}
+
+.flag-text {
+    color: green !important;
+    font-weight: 700;
+}
+
+.bomb-text {
+    color: red !important;
+    font-weight: 700;
+}
+
+.cell {
+    cursor: pointer;
+}
+
+.cell:hover {
+    background-color: blue !important;
+}
+
+td {
+    width: 100px;
+}
+
+.mob {
+    font-size: 16px;
+}

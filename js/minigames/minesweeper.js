@@ -1,7 +1,6 @@
 let volumeIncreaseInterval;
 const elevator = document.getElementById("elevatorSound");
 const victorySound = document.getElementById("victory");
-var sonicSound = document.getElementById("sonicSound");
 const explosionSound = document.getElementById("explosionSound");
 
 elevator.loop = true;
@@ -23,68 +22,10 @@ emojis[5] = "😎";
 emojis[6] = "😎";
 emojis[7] = "😎";
 
-function updateProgressBar() {
-  var now = new Date();
-  var start = new Date(now.getFullYear(), 0, 0);
-  var diff = now - start;
-  var oneDay = 1000 * 60 * 60 * 24;
-  var dayOfYear = Math.floor(diff / oneDay);
-  var progress = (dayOfYear / 365) * 100;
-  var progressBar = document.getElementById("progress-bar");
-
-  progressBar.style.width = progress + "%";
-}
-
-function updateCounter() {
-  var now = new Date();
-
-  var endOfYear = new Date(now.getFullYear() + 1, 0, 0);
-
-  var diff = endOfYear - now;
-
-  var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  var seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-  var counter = document.getElementById("counter");
-  var year = document.getElementById("year");
-
-  var icon = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
-                  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-                </svg>`;
-
-  counter.innerHTML =
-    icon +
-    " " +
-    days +
-    " Dias " +
-    hours +
-    " Horas " +
-    minutes +
-    " Minutos " +
-    seconds +
-    " Segundos";
-  year.innerHTML = now.getFullYear();
-}
-
-setInterval(updateCounter, 1000);
-document
-  .getElementById("darkModeSwitch")
-  .addEventListener("change", function () {
-    const htmlElement = document.documentElement;
-    const currentTheme = htmlElement.getAttribute("data-bs-theme");
-
-    if (currentTheme === "dark") {
-      htmlElement.removeAttribute("data-bs-theme");
-    } else {
-      htmlElement.setAttribute("data-bs-theme", "dark");
-    }
-  });
-
-$("#loadGame1").on("click", function () {
+$(document).ready(function () {
   $("#indexContent").addClass("hide");
   $("#gameContent").removeClass("hide");
+  $("#game1").removeClass("hide");
   startMineSweeper();
 });
 
@@ -111,11 +52,10 @@ function calculateCells() {
   if (nonBombCount - flagsFound === 0) {
     $("#winOrLose").html("Você venceu!");
     victory();
-    stopVolumeIncrease();
   }
 
   if (nonBombCount - flagsFound === 1) {
-    // startSonicSound();
+    //
   }
 }
 
@@ -126,51 +66,15 @@ function showBombs() {
   });
 }
 
-function startSonicSound() {
-  $("#lastBomb").html("ENCONTRE A ÚLTIMA BANDEIRA!!!!!!");
-  elevator.pause();
-  sonicSound.currentTime = 0;
-
-  // sonicSound.play();
-  // sonicSound.volume = 0;
-  // let counter = 0;
-
-  // volumeIncreaseInterval = setInterval(() => {
-  //   counter++;
-  //   console.log(counter);
-  //   if (sonicSound.volume < 0.9) {
-  //     increaseVolume(sonicSound);
-  //   }
-
-  //   if (counter === 12) {
-  //     setInterval(() => {
-  //       sonicSound.pause();
-  //     }, 500);
-  //   }
-  //   if (counter === 13) {
-  //     sonicSound.pause();
-  //     lose();
-  //   }
-  // }, 1000);
-}
-
-function stopVolumeIncrease() {
-  sonicSound.pause();
-  clearInterval(volumeIncreaseInterval);
-}
-
 function victory() {
   hasVictory = true;
   victorySound.volume = 0.7;
   victorySound.play();
-  stopVolumeIncrease();
   showBombs();
 }
 
 function back() {
-  destroyMineSweeper();
-  $("#indexContent").removeClass("hide");
-  $("#gameContent").addClass("hide");
+    history.go(-1)
 }
 
 function restartMineSweeper() {
@@ -181,7 +85,6 @@ function restartMineSweeper() {
 function destroyMineSweeper() {
   $(".minesweeper-board").empty();
   $("#winOrLose").html("&nbsp;");
-  stopVolumeIncrease();
   elevator.pause();
 }
 
@@ -196,7 +99,7 @@ function lose() {
 
 function triggerClickOnBombs() {
   $(".cell.bomb").each(function () {
-    $(this).click(); // Dispara um evento de clique em cada célula com a classe "bomb"
+    $(this).click();
   });
 }
 
@@ -241,7 +144,6 @@ function startMineSweeper() {
             playing = false;
             explosionSound.play();
             elevator.pause();
-            stopVolumeIncrease();
           } else {
             $(this).addClass("flag");
             const row = $(this).parent().index();
@@ -280,23 +182,3 @@ function startMineSweeper() {
   }
   calculateCells();
 }
-
-window.onload = function () {
-  updateProgressBar();
-  updateCounter();
-
-  if (
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    )
-  ) {
-    // O usuário está acessando a partir de um dispositivo móvel
-    mobile = true;
-    numRows = 9;
-    numCols = 6;
-    numBombs = 10;
-  } else {
-    // O usuário está acessando a partir de um computador
-    console.log("Usuário está em um computador");
-  }
-};
