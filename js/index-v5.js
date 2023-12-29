@@ -81,5 +81,5 @@ $("#loadGame1").on("click", function () {
   window.location.href = "minesweeper.html";
 });
 $("#loadGame2").on("click", function () {
-  window.location.href = "snake.html";
+  window.location.href = "fezinha.html";
 });
